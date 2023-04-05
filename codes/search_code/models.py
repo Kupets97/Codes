@@ -65,6 +65,14 @@ class Code(models.Model):
         verbose_name='Категория',
         db_index=True,
     )
+    clean_code = models.CharField(
+        max_length=10,
+        verbose_name='Clean Code',
+        unique=True,
+        db_index=True,
+        null=True,  
+        blank=True, 
+    )
     class Meta:
         ordering = ('id',)
         verbose_name = 'Код'
@@ -75,4 +83,16 @@ class Code(models.Model):
 
     @property
     def all(self):
-        return f' Код: {self.code}, Обозначение: {self.description}'    
+        return f' Код: {self.code}, Обозначение: {self.description}'
+
+    def save(self, *args, **kwargs):
+        self.clean_code = self.code.replace(' ', '').replace('.', '') 
+        super(Code, self).save(*args, **kwargs)
+
+    def update_clean_code(self):
+        clean_code = self.code.replace(' ', '').replace('.', '')
+        i = 1
+        while Code.objects.filter(clean_code=clean_code).exclude(id=self.id).exists():
+            clean_code = f"{clean_code}_{i}"
+            i += 1
+        self.clean_code = clean_code

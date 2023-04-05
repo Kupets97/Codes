@@ -10,9 +10,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class CodeSerialzier(serializers.ModelSerializer):
-
     category = CategorySerializer()
-
     class Meta:
         model = Code
-        fields = ('code', 'description', 'category')
+        fields = ('code', 'clean_code', 'description', 'category')

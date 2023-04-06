@@ -96,3 +96,4 @@ class Code(models.Model):
             clean_code = f"{clean_code}_{i}"
             i += 1
         self.clean_code = clean_code
+        
